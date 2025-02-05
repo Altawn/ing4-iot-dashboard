@@ -107,22 +107,21 @@ Aujourd'hui, l'exercice n'étant seulement "une reponse" à un appel d'offre, je
 
 ## Notation
 
-Je pars du principe que vous êtes des entreprises capables de repondre à mon besoin et que vous me fournissez un maquette / POC qui permet de repondre à mon appel d'offre. En fonction de ce que vous me présenterez, ergonomie, fonctionnalité implémenté, features innovantes (**soyez créatif**), code bien versionné, documentation qualitative... la note restera à 20 ou descendra petit à petit.
+Je pars du principe que vous êtes des entreprises capables de repondre à mon besoin et que vous me fournissez un maquette / MVP qui permet de repondre à mon appel d'offre. En fonction de ce que vous me présenterez, réflexions, ergonomie, fonctionnalités implémentés, features innovantes (**soyez créatif**), code bien versionné, documentation qualitative, demo du produit... la note restera à 20 ou descendra petit à petit.
 
 ---
 
 En bref...
 - Utiliser des outils de planification/gestion
 - Créer un wireframe de votre site
-- Créer 6 widgets dont minimum un graphe et un faisant appel aux données de votre API
-- Utiliser Storybook pour tester vos widgets
+- Créer 6 widgets dont minimum un graphe, et, un minimum faisant appel aux données d'une API externe
 - Le dashboard doit être responsive (PC, tablette, mobile)
 - Créer une API et une BDD MongoDB
 - L’aspect visuel de votre site sera également évalué
+- Utiliser Storybook pour tester vos widgets _*(optionel)*_
 
 Sources d’inspirations :
 
-https://www.uplabs.com/search?q=dashboard <br/>
 https://dribbble.com/search?q=dashboard <br/>
 
 __Bon courage à tous !!__
