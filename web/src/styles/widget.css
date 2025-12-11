@@ -1,0 +1,31 @@
+.widget {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+.widget-header {
+    margin-bottom: 1rem;
+}
+
+.widget-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.widget-content {
+    flex: 1;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}

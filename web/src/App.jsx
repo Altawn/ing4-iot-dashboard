@@ -1,21 +1,21 @@
-import "./App.css";
-
-import logo from "./assets/react.svg";
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import Dashboard from './pages/Dashboard';
+import Admin from './pages/Admin';
+import './App.css';
 
 function App() {
   return (
-    <div
-      style={{
-        marginTop: "auto",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <h1 style={{ marginTop: "auto" }}>Let's Start !</h1>
-      <img src={logo} alt="react_logo" style={{ marginBottom: "auto" }} />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="admin" element={<Admin />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
