@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Widget from '../components/Widget';
 import SensorGlobe from '../components/SensorGlobe';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Cloud, Wind, Droplets, User, Radio, AlertTriangle } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, BarChart, Bar } from 'recharts';
+import { Cloud, Wind, Droplets, User, Radio, MapPin } from 'lucide-react';
 import '../styles/dashboard.css';
 
-const data = [
-    { name: 'Mon', sensors: 4000, active: 2400 },
-    { name: 'Tue', sensors: 3000, active: 1398 },
-    { name: 'Wed', sensors: 2000, active: 9800 },
-    { name: 'Thu', sensors: 2780, active: 3908 },
-    { name: 'Fri', sensors: 1890, active: 4800 },
-    { name: 'Sat', sensors: 2390, active: 3800 },
-    { name: 'Sun', sensors: 3490, active: 4300 },
-];
+const COLORS = ['#38bdf8', '#818cf8', '#34d399', '#f472b6', '#fbbf24', '#f87171'];
 
 const Dashboard = () => {
     const [weather, setWeather] = useState(null);
+    const [stats, setStats] = useState({
+        totalSensors: 0,
+        totalUsers: 0,
+        totalMeasures: 0,
+        sensorTypeData: [],
+        locationData: [],
+        creationHistory: [],
+        activeCountries: []
+    });
 
     useEffect(() => {
         // Mocking Weather API call
@@ -27,51 +28,89 @@ const Dashboard = () => {
                 condition: 'Cloudy'
             });
         }, 1000);
+
+        // Fetching Real Dashboard Stats from MongoDB
+        fetch('http://localhost:3000/api/dashboard-stats')
+            .then(res => res.json())
+            .then(data => {
+                console.log('Dashboard stats:', data);
+                setStats(data);
+            })
+            .catch(err => console.error("Stats API Error:", err));
     }, []);
 
     return (
         <div className="dashboard-grid">
-            {/* Widget 1: Total Sensors */}
-            <Widget className="stat-card">
-                <div className="stat-content">
-                    <div className="stat-icon-bg">
-                        <Radio size={24} color="#38bdf8" />
-                    </div>
-                    <div>
-                        <p className="stat-label">Total Sensors</p>
-                        <h4 className="stat-value">1,234</h4>
-                    </div>
+            {/* Widget 1: Sensor Types (Pie Chart) */}
+            <Widget title={`Types de Capteurs (${stats.totalMeasures} mesures)`} className="stat-card">
+                <div style={{ width: '100%', height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <ResponsiveContainer>
+                        <PieChart>
+                            <Pie
+                                data={stats.sensorTypeData.length > 0 ? stats.sensorTypeData : [{ name: 'Chargement...', value: 1 }]}
+                                innerRadius={60}
+                                outerRadius={80}
+                                paddingAngle={5}
+                                dataKey="value"
+                            >
+                                {stats.sensorTypeData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip
+                                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                                itemStyle={{ color: '#f8fafc' }}
+                            />
+                            <Legend
+                                verticalAlign="bottom"
+                                height={36}
+                                formatter={(value) => <span style={{ color: '#94a3b8', fontSize: '12px' }}>{value}</span>}
+                            />
+                        </PieChart>
+                    </ResponsiveContainer>
                 </div>
             </Widget>
 
-            {/* Widget 2: Active Users */}
+            {/* Widget 2: Total Users */}
             <Widget className="stat-card">
                 <div className="stat-content">
                     <div className="stat-icon-bg" style={{ background: 'rgba(168, 85, 247, 0.1)' }}>
                         <User size={24} color="#a855f7" />
                     </div>
                     <div>
-                        <p className="stat-label">Active Users</p>
-                        <h4 className="stat-value">856</h4>
+                        <p className="stat-label">Total Utilisateurs</p>
+                        <h4 className="stat-value">{stats.totalUsers}</h4>
                     </div>
                 </div>
             </Widget>
 
-            {/* Widget 3: Alerts */}
-            <Widget className="stat-card">
-                <div className="stat-content">
-                    <div className="stat-icon-bg" style={{ background: 'rgba(239, 68, 68, 0.1)' }}>
-                        <AlertTriangle size={24} color="#ef4444" />
-                    </div>
-                    <div>
-                        <p className="stat-label">System Alerts</p>
-                        <h4 className="stat-value">3</h4>
-                    </div>
+            {/* Widget 3: Sensors by Location (Bar Chart) */}
+            <Widget title="Capteurs par Localisation" className="stat-card">
+                <div style={{ width: '100%', height: 200 }}>
+                    <ResponsiveContainer>
+                        <BarChart data={stats.locationData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                            <XAxis
+                                dataKey="name"
+                                stroke="#94a3b8"
+                                tick={{ fontSize: 11 }}
+                                angle={-45}
+                                textAnchor="end"
+                                height={60}
+                            />
+                            <YAxis stroke="#94a3b8" />
+                            <Tooltip
+                                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}
+                                itemStyle={{ color: '#f8fafc' }}
+                            />
+                            <Bar dataKey="value" fill="#38bdf8" radius={[8, 8, 0, 0]} />
+                        </BarChart>
+                    </ResponsiveContainer>
                 </div>
             </Widget>
 
             {/* Widget 4: Weather (External API) */}
-            <Widget title="Local Weather" className="weather-widget">
+            <Widget title="Météo Locale" className="weather-widget">
                 {weather ? (
                     <div className="weather-content">
                         <div className="weather-main">
@@ -89,17 +128,17 @@ const Dashboard = () => {
                         <p className="city-name">{weather.city}</p>
                     </div>
                 ) : (
-                    <p>Loading weather...</p>
+                    <p>Chargement météo...</p>
                 )}
             </Widget>
 
-            {/* Widget 5: Main Chart (Graph) */}
-            <Widget title="Sensor Activity" fullWidth className="chart-widget">
+            {/* Widget 5: Sensor Activity Over Time (Area Chart) */}
+            <Widget title="Activité Capteurs (Nouveaux par Mois)" fullWidth className="chart-widget">
                 <div style={{ width: '100%', height: 300 }}>
                     <ResponsiveContainer>
-                        <AreaChart data={data}>
+                        <AreaChart data={stats.creationHistory}>
                             <defs>
-                                <linearGradient id="colorActive" x1="0" y1="0" x2="0" y2="1">
+                                <linearGradient id="colorSensors" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.8} />
                                     <stop offset="95%" stopColor="#38bdf8" stopOpacity={0} />
                                 </linearGradient>
@@ -111,15 +150,15 @@ const Dashboard = () => {
                                 contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}
                                 itemStyle={{ color: '#f8fafc' }}
                             />
-                            <Area type="monotone" dataKey="active" stroke="#38bdf8" fillOpacity={1} fill="url(#colorActive)" />
+                            <Area type="monotone" dataKey="sensors" stroke="#38bdf8" fillOpacity={1} fill="url(#colorSensors)" />
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>
             </Widget>
 
             {/* Widget 6: Live Global Coverage */}
-            <Widget title="Live Global Coverage" fullWidth className="globe-widget">
-                <SensorGlobe />
+            <Widget title="Couverture Mondiale" fullWidth className="globe-widget">
+                <SensorGlobe activeCountries={stats.activeCountries} />
             </Widget>
         </div>
     );
