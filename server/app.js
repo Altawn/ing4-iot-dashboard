@@ -114,20 +114,73 @@ app.get('/api/system-status', (req, res) => {
     });
 });
 
-// Lists
+// Lists (Read)
 app.get('/api/users', async (req, res) => {
-    const users = await User.find().limit(50);
-    res.json(users);
+    try {
+        const users = await User.find().sort({ _id: -1 }).limit(100);
+        res.json(users);
+    } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 app.get('/api/sensors', async (req, res) => {
-    const sensors = await Sensor.find().limit(50);
-    res.json(sensors);
+    try {
+        const sensors = await Sensor.find().sort({ _id: -1 }).limit(100);
+        res.json(sensors);
+    } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 app.get('/api/measures', async (req, res) => {
-    const measures = await Measure.find().limit(50);
-    res.json(measures);
+    try {
+        const measures = await Measure.find().sort({ _id: -1 }).limit(100);
+        res.json(measures);
+    } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// Create
+app.post('/api/users', async (req, res) => {
+    try {
+        const user = new User(req.body);
+        await user.save();
+        res.json(user);
+    } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+app.post('/api/sensors', async (req, res) => {
+    try {
+        const sensor = new Sensor(req.body);
+        await sensor.save();
+        res.json(sensor);
+    } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+// Update
+app.put('/api/users/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(user);
+    } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+app.put('/api/sensors/:id', async (req, res) => {
+    try {
+        const sensor = await Sensor.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(sensor);
+    } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+// Delete
+app.delete('/api/users/:id', async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+app.delete('/api/sensors/:id', async (req, res) => {
+    try {
+        await Sensor.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (err) { res.status(400).json({ error: err.message }); }
 });
 
 app.listen(port, () => {
