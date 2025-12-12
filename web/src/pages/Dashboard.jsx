@@ -72,14 +72,11 @@ const Dashboard = () => {
             </Widget>
 
             {/* Widget 2: Total Users */}
-            <Widget className="stat-card">
-                <div className="stat-content">
-                    <div className="stat-icon-bg" style={{ background: 'rgba(168, 85, 247, 0.1)' }}>
-                        <User size={24} color="#a855f7" />
-                    </div>
-                    <div>
-                        <p className="stat-label">Total Utilisateurs</p>
-                        <h4 className="stat-value">{stats.totalUsers}</h4>
+            <Widget title="Total Utilisateurs" className="stat-card">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '15px' }}>
+                    <h4 className="stat-value" style={{ fontSize: '3.5rem', fontWeight: '800', color: '#a855f7', lineHeight: 1 }}>{stats.totalUsers}</h4>
+                    <div className="stat-icon-bg" style={{ background: 'rgba(168, 85, 247, 0.1)', width: '56px', height: '56px', borderRadius: '16px' }}>
+                        <User size={32} color="#a855f7" />
                     </div>
                 </div>
             </Widget>

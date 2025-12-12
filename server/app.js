@@ -183,6 +183,28 @@ app.delete('/api/sensors/:id', async (req, res) => {
     } catch (err) { res.status(400).json({ error: err.message }); }
 });
 
+app.post('/api/measures', async (req, res) => {
+    try {
+        const measure = new Measure(req.body);
+        await measure.save();
+        res.json(measure);
+    } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+app.put('/api/measures/:id', async (req, res) => {
+    try {
+        const measure = await Measure.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(measure);
+    } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
+app.delete('/api/measures/:id', async (req, res) => {
+    try {
+        await Measure.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (err) { res.status(400).json({ error: err.message }); }
+});
+
 app.listen(port, () => {
     console.log(`Backend running at http://localhost:${port}`);
 });
