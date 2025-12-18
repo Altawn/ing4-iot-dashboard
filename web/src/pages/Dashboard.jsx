@@ -30,7 +30,7 @@ const Dashboard = () => {
         }, 1000);
 
         // Fetching Real Dashboard Stats from MongoDB
-        fetch('http://localhost:3000/api/dashboard-stats')
+        fetch('http://localhost:3001/api/dashboard-stats')
             .then(res => res.json())
             .then(data => {
                 console.log('Dashboard stats:', data);

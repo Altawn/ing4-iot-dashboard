@@ -18,7 +18,7 @@ const Admin = () => {
             if (activeTab === 'users') endpoint = 'users';
             else if (activeTab === 'sensors') endpoint = 'sensors';
             else endpoint = 'measures';
-            const res = await fetch(`http://localhost:3000/api/${endpoint}`);
+            const res = await fetch(`http://localhost:3001/api/${endpoint}`);
             const result = await res.json();
             if (Array.isArray(result)) {
                 setData(result);
@@ -44,7 +44,7 @@ const Admin = () => {
             if (activeTab === 'users') endpoint = 'users';
             else if (activeTab === 'sensors') endpoint = 'sensors';
             else endpoint = 'measures';
-            await fetch(`http://localhost:3000/api/${endpoint}/${id}`, {
+            await fetch(`http://localhost:3001/api/${endpoint}/${id}`, {
                 method: 'DELETE'
             });
             fetchData(); // Refresh list
@@ -62,8 +62,8 @@ const Admin = () => {
             else endpoint = 'measures';
             const method = editingItem ? 'PUT' : 'POST';
             const url = editingItem
-                ? `http://localhost:3000/api/${endpoint}/${editingItem._id}`
-                : `http://localhost:3000/api/${endpoint}`;
+                ? `http://localhost:3001/api/${endpoint}/${editingItem._id}`
+                : `http://localhost:3001/api/${endpoint}`;
 
             await fetch(url, {
                 method: method,

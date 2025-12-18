@@ -53,8 +53,7 @@ Le back-end de ce projet expose une API REST qui permet d’accéder aux donnée
 Les contraintes sont les suivantes :
 
 - L’API devra être réalisée à l’aide du framework __expressjs__.
-- Elle devra implémenter les 4 opérations CRUD (Creation, Research, Update,
-Delete des données) pour gerer les données de votre BDD.
+- Elle devra implémenter les 4 opérations CRUD (Creation, Research, Update, Delete) des données pour gerer les données de votre BDD.
 - Vous devrez sauvegarder vos données dans une BDD utilisant MongoDB.
     - Un jeu de données est déjà exploitable. Les scripts à charger pour populler votre BDD se trouve [ici](./resources/)
 
