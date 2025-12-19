@@ -23,7 +23,31 @@ const User = mongoose.model('User', UserSchema);
 const Sensor = mongoose.model('Sensor', SensorSchema);
 const Measure = mongoose.model('Measure', MeasureSchema);
 
+const { searchSerp } = require('./serpService');
+
 // --- API Endpoints ---
+
+// SERP API Proxy
+app.get('/api/search', async (req, res) => {
+    const { q, type } = req.query; // type can be 'search', 'shopping', 'news'
+
+    if (!q) {
+        return res.status(400).json({ error: 'Query parameter "q" is required' });
+    }
+
+    let engine = 'google';
+    if (type === 'shopping') engine = 'google_shopping';
+    if (type === 'news') engine = 'google_news';
+
+    try {
+        const data = await searchSerp(q, engine);
+        res.json(data);
+    } catch (err) {
+        console.error('SERP API Error:', err);
+        res.status(500).json({ error: 'Failed to fetch search results' });
+    }
+});
+
 
 app.get('/', (req, res) => {
     res.send('P.E.IoT API is running with MongoDB!');
