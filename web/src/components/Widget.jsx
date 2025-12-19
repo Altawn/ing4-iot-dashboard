@@ -1,4 +1,3 @@
-import React from 'react';
 import '../styles/widget.css';
 
 const Widget = ({ title, children, className = '', fullWidth = false }) => {
