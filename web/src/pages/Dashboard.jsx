@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Widget from '../components/Widget';
 import SensorGlobe from '../components/SensorGlobe';
+import ShoppingWidget from '../components/ShoppingWidget';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, BarChart, Bar } from 'recharts';
 import { Cloud, Wind, Droplets, User, Radio, MapPin } from 'lucide-react';
 import '../styles/dashboard.css';
@@ -128,6 +129,9 @@ const Dashboard = () => {
                     <p>Chargement météo...</p>
                 )}
             </Widget>
+
+            {/* Widget 5: Marketplace */}
+            <ShoppingWidget />
 
             {/* Widget 5: Sensor Activity Over Time (Area Chart) */}
             <Widget title="Activité Capteurs (Nouveaux par Mois)" fullWidth className="chart-widget">
