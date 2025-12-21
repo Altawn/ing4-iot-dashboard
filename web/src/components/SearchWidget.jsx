@@ -54,14 +54,14 @@ const SearchWidget = () => {
         if (results.answer_box) {
             return (
                 <div style={{
-                    padding: '12px',
-                    background: 'rgba(56, 189, 248, 0.1)',
-                    borderLeft: '4px solid #38bdf8',
-                    borderRadius: '4px',
+                    padding: '16px',
+                    background: 'var(--card-upgrade)',
+                    borderLeft: '4px solid #6366f1',
+                    borderRadius: '12px',
                     marginBottom: '10px'
                 }}>
-                    <h4 style={{ fontSize: '0.9rem', color: '#38bdf8', marginBottom: '4px' }}>Réponse Rapide</h4>
-                    <p style={{ fontSize: '0.95rem', lineHeight: '1.4', wordBreak: 'break-word' }}>{results.answer_box.snippet || results.answer_box.answer}</p>
+                    <h4 style={{ fontSize: '0.9rem', color: '#6366f1', marginBottom: '4px', fontWeight: 'bold' }}>Réponse Rapide</h4>
+                    <p style={{ fontSize: '0.95rem', lineHeight: '1.4', wordBreak: 'break-word', color: '#111827' }}>{results.answer_box.snippet || results.answer_box.answer}</p>
                 </div>
             );
         }
@@ -72,7 +72,7 @@ const SearchWidget = () => {
             return (
                 <div style={{ padding: '8px 0' }}>
                     <a href={first.link} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
-                        <h4 style={{ color: '#38bdf8', fontSize: '1rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <h4 style={{ color: '#6366f1', fontSize: '1rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 'bold' }}>
                             {first.title} <ExternalLink size={12} />
                         </h4>
                         <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4', wordBreak: 'break-word' }}>{first.snippet}</p>
@@ -106,15 +106,16 @@ const SearchWidget = () => {
                     <button
                         type="submit"
                         style={{
-                            background: '#38bdf8',
+                            background: '#6366f1',
                             color: 'white',
                             border: 'none',
-                            borderRadius: '8px',
-                            padding: '0 12px',
+                            borderRadius: '12px',
+                            padding: '0 16px',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            boxShadow: '0 4px 6px -1px rgba(99, 102, 241, 0.2)'
                         }}
                     >
                         <Search size={18} />

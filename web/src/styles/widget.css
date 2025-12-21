@@ -1,24 +1,27 @@
 .widget {
-    padding: 1.5rem;
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     height: 100%;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
 }
 
 .widget:hover {
     transform: translateY(-2px);
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    border-color: rgba(56, 189, 248, 0.3);
+    box-shadow: var(--shadow-md);
 }
 
 .widget-header {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .widget-header h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
     color: var(--text-primary);
 }
 

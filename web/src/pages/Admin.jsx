@@ -205,15 +205,16 @@ const Admin = () => {
                 <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>Administration Panel</h2>
 
                 {/* Tab Switcher */}
-                <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '8px', padding: '4px' }}>
+                <div style={{ display: 'flex', background: 'var(--bg-card)', borderRadius: '12px', padding: '6px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
                     <button
                         onClick={() => setActiveTab('users')}
                         style={{
                             display: 'flex', gap: '8px', alignItems: 'center',
-                            padding: '8px 16px', borderRadius: '6px',
-                            background: activeTab === 'users' ? '#3b82f6' : 'transparent',
+                            padding: '10px 20px', borderRadius: '8px',
+                            background: activeTab === 'users' ? '#6366f1' : 'transparent',
                             color: activeTab === 'users' ? 'white' : 'var(--text-secondary)',
-                            border: 'none', cursor: 'pointer', transition: 'all 0.2s'
+                            border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+                            fontWeight: '600'
                         }}
                     >
                         <User size={18} /> Users
@@ -222,10 +223,11 @@ const Admin = () => {
                         onClick={() => setActiveTab('sensors')}
                         style={{
                             display: 'flex', gap: '8px', alignItems: 'center',
-                            padding: '8px 16px', borderRadius: '6px',
-                            background: activeTab === 'sensors' ? '#3b82f6' : 'transparent',
+                            padding: '10px 20px', borderRadius: '8px',
+                            background: activeTab === 'sensors' ? '#6366f1' : 'transparent',
                             color: activeTab === 'sensors' ? 'white' : 'var(--text-secondary)',
-                            border: 'none', cursor: 'pointer', transition: 'all 0.2s'
+                            border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+                            fontWeight: '600'
                         }}
                     >
                         <Radio size={18} /> Sensors
@@ -234,10 +236,11 @@ const Admin = () => {
                         onClick={() => setActiveTab('measures')}
                         style={{
                             display: 'flex', gap: '8px', alignItems: 'center',
-                            padding: '8px 16px', borderRadius: '6px',
-                            background: activeTab === 'measures' ? '#3b82f6' : 'transparent',
+                            padding: '10px 20px', borderRadius: '8px',
+                            background: activeTab === 'measures' ? '#6366f1' : 'transparent',
                             color: activeTab === 'measures' ? 'white' : 'var(--text-secondary)',
-                            border: 'none', cursor: 'pointer', transition: 'all 0.2s'
+                            border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+                            fontWeight: '600'
                         }}
                     >
                         <Activity size={18} /> Measures
@@ -253,9 +256,9 @@ const Admin = () => {
                         onClick={() => openModal()}
                         style={{
                             display: 'flex', gap: '8px', alignItems: 'center',
-                            background: '#22c55e', color: 'white', border: 'none',
-                            padding: '8px 16px', borderRadius: '6px', cursor: 'pointer',
-                            fontWeight: '600'
+                            background: '#6366f1', color: 'white', border: 'none',
+                            padding: '10px 20px', borderRadius: '10px', cursor: 'pointer',
+                            fontWeight: '600', boxShadow: '0 4px 6px -1px rgba(99, 102, 241, 0.2)'
                         }}
                     >
                         <Plus size={18} /> Add New
@@ -446,9 +449,10 @@ const Admin = () => {
                             <button
                                 type="submit"
                                 style={{
-                                    marginTop: '8px', padding: '12px', borderRadius: '6px',
-                                    background: '#3b82f6', color: 'white', border: 'none',
-                                    fontWeight: 'bold', cursor: 'pointer'
+                                    marginTop: '8px', padding: '14px', borderRadius: '10px',
+                                    background: '#6366f1', color: 'white', border: 'none',
+                                    fontWeight: 'bold', cursor: 'pointer',
+                                    boxShadow: '0 4px 6px -1px rgba(99, 102, 241, 0.3)'
                                 }}
                             >
                                 Save Changes

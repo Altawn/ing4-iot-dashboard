@@ -51,107 +51,107 @@ const SensorGlobe = ({ activeCountries = [] }) => {
         return countryData.map(c => c.iso);
     }, [countryData]);
 
+    const containerRef = useRef();
+    const [dimensions, setDimensions] = useState({ width: 400, height: 400 });
+
+    useEffect(() => {
+        if (containerRef.current) {
+            setDimensions({
+                width: containerRef.current.offsetWidth,
+                height: containerRef.current.offsetHeight
+            });
+        }
+
+        const handleResize = () => {
+            if (containerRef.current) {
+                setDimensions({
+                    width: containerRef.current.offsetWidth,
+                    height: containerRef.current.offsetHeight
+                });
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     useEffect(() => {
         // Load World GeoJSON
         fetch('https://raw.githubusercontent.com/vasturiano/react-globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
             .then(res => res.json())
             .then(setCountries);
 
-        // Create ripple rings effect (Red Pings)
+        // Ripple rings effect
         const interval = setInterval(() => {
             setRings(currentRings => {
-                const newRings = countryData.map(loc => ({
+                return countryData.map(loc => ({
                     lat: loc.lat,
                     lng: loc.lng,
-                    maxR: 6,
-                    propagationSpeed: 2,
-                    repeatPeriod: 2000
+                    maxR: 8,
+                    propagationSpeed: 2.5,
+                    repeatPeriod: 2500
                 }));
-                return newRings;
             });
-        }, 2000);
+        }, 2500);
 
         return () => clearInterval(interval);
     }, [countryData]);
 
     useEffect(() => {
         if (globeEl.current) {
-            // Auto-rotate
             globeEl.current.controls().autoRotate = true;
-            globeEl.current.controls().autoRotateSpeed = 0.5;
-
-            // Start centered on world view
-            globeEl.current.pointOfView({ lat: 20, lng: 0, altitude: 2.5 }, 0);
+            globeEl.current.controls().autoRotateSpeed = 0.8;
+            globeEl.current.pointOfView({ lat: 20, lng: 0, altitude: 2.2 }, 0);
         }
     }, []);
 
-    // Custom HTML markers (Pins)
     const htmlMarkers = useMemo(() => {
         return countryData.map(d => ({
             lat: d.lat,
             lng: d.lng,
             size: 15,
-            color: '#ef4444',
+            color: '#fbbf24',
             html: `
-                <div style="
-                    color: #ef4444;
-                    font-weight: bold;
-                    font-size: 24px;
-                    text-align: center;
-                    pointer-events: none;
-                    text-shadow: 0 0 4px rgba(0,0,0,0.8);
-                ">📍</div>
-                <div style="
-                    color: white;
-                    font-size: 10px;
-                    text-align: center;
-                    margin-top: -5px;
-                    pointer-events: none;
-                    text-shadow: 0 0 3px rgba(0,0,0,0.9);
-                    font-weight: 600;
-                ">${d.country}</div>
+                <div style="text-align: center; pointer-events: none;">
+                    <div style="color: #fbbf24; font-size: 24px;">📍</div>
+                    <div style="color: white; font-size: 11px; text-shadow: 0 0 4px #000; font-weight: bold;">${d.country}</div>
+                </div>
             `
         }));
     }, [countryData]);
 
     return (
-        <div style={{
-            width: '100%',
-            height: '400px',
-            overflow: 'hidden',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-        }}>
+        <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, background: '#000' }}>
             <Globe
                 ref={globeEl}
-                width={800}
-                height={400}
-                globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                width={dimensions.width}
+                height={dimensions.height}
+                globeImageUrl="https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+                bumpImageUrl="https://unpkg.com/three-globe/example/img/earth-topology.png"
+                backgroundImageUrl="https://unpkg.com/three-globe/example/img/night-sky.png"
                 backgroundColor="rgba(0,0,0,0)"
+                showAtmosphere={true}
+                atmosphereColor="#6366f1"
+                atmosphereAltitude={0.25}
 
-                // Country Polygons with Red Highlight
                 polygonsData={countries.features}
-                polygonAltitude={0.01}
+                polygonAltitude={0.02}
                 polygonCapColor={d => {
                     const iso3 = d.properties.ISO_A3 || d.properties.ADM0_A3;
-                    return activeIsoCodes.includes(iso3) ? 'rgba(239, 68, 68, 0.3)' : 'rgba(100, 100, 100, 0.1)';
+                    return activeIsoCodes.includes(iso3) ? 'rgba(99, 102, 241, 0.6)' : 'rgba(255, 255, 255, 0.05)';
                 }}
                 polygonSideColor={() => 'rgba(0, 0, 0, 0)'}
                 polygonStrokeColor={d => {
                     const iso3 = d.properties.ISO_A3 || d.properties.ADM0_A3;
-                    return activeIsoCodes.includes(iso3) ? '#ef4444' : '#333';
+                    return activeIsoCodes.includes(iso3) ? '#6366f1' : 'rgba(255, 255, 255, 0.1)';
                 }}
-                polygonLabel={() => ''}
 
-                // Red Pings (Ripple Rings)
                 ringsData={rings}
-                ringColor={() => ['#ef4444', 'rgba(239, 68, 68, 0)']}
+                ringColor={() => ['#6366f1', 'rgba(99, 102, 241, 0)']}
                 ringMaxRadius="maxR"
                 ringPropagationSpeed="propagationSpeed"
                 ringRepeatPeriod="repeatPeriod"
 
-                // Custom HTML Markers (Red Pins with Labels)
                 htmlElementsData={htmlMarkers}
                 htmlElement={d => {
                     const el = document.createElement('div');
@@ -159,10 +159,6 @@ const SensorGlobe = ({ activeCountries = [] }) => {
                     el.style.pointerEvents = 'none';
                     return el;
                 }}
-
-                // Atmosphere styling (Red glow)
-                atmosphereColor="#ef4444"
-                atmosphereAltitude={0.15}
             />
         </div>
     );

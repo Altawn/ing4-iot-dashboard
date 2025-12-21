@@ -99,10 +99,10 @@ const MeasuresWidget = () => {
                         onChange={(e) => setSelectedSensor(e.target.value)}
                         style={{
                             width: '100%',
-                            padding: '8px 12px 8px 36px',
-                            borderRadius: '8px',
+                            padding: '12px 14px 12px 38px',
+                            borderRadius: '12px',
                             border: '1px solid var(--border-color)',
-                            background: 'var(--bg-secondary)',
+                            background: '#f9f9f7',
                             color: 'var(--text-primary)',
                             fontSize: '0.9rem',
                             outline: 'none',
@@ -112,7 +112,7 @@ const MeasuresWidget = () => {
                         <option value="">-- Sélectionner un capteur --</option>
                         {sensors.map(sensor => (
                             <option key={sensor._id} value={sensor._id}>
-                                {sensor.location} - {getSensorCountry(sensor)} ({sensor.creationDate})
+                                {sensor.location} - {getSensorCountry(sensor)}
                             </option>
                         ))}
                     </select>
@@ -125,11 +125,14 @@ const MeasuresWidget = () => {
                         color: 'var(--text-secondary)',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '6px',
-                        padding: '0 4px'
+                        gap: '8px',
+                        padding: '4px 8px',
+                        background: 'var(--card-balance)',
+                        borderRadius: '8px',
+                        width: 'fit-content'
                     }}>
-                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34d399' }}></span>
-                        Localisation : <span style={{ color: 'var(--text-primary)', fontWeight: '500' }}>{getSensorCountry(selectedSensorObj)}</span>
+                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
+                        Localisation : <span style={{ color: '#065f46', fontWeight: '600' }}>{getSensorCountry(selectedSensorObj)}</span>
                     </div>
                 )}
 
@@ -137,21 +140,23 @@ const MeasuresWidget = () => {
                 <div style={{
                     flex: 1,
                     overflowY: 'auto',
-                    minHeight: '150px',
+                    minHeight: '200px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '8px'
+                    gap: '12px',
+                    paddingRight: '4px'
                 }}>
                     {loading && <p style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>Chargement...</p>}
 
                     {!loading && selectedSensor && measures.length === 0 && (
-                        <p style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>Aucune mesure trouvée.</p>
+                        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '20px' }}>Aucune mesure trouvée.</p>
                     )}
 
                     {!loading && !selectedSensor && (
-                        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '20px' }}>
-                            Veuillez sélectionner un capteur pour voir ses mesures.
-                        </p>
+                        <div style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '40px', opacity: 0.6 }}>
+                            <Activity size={48} style={{ marginBottom: '12px', display: 'block', margin: '0 auto' }} />
+                            <p>Sélectionnez un capteur pour analyser les données en temps réel.</p>
+                        </div>
                     )}
 
                     {measures.map((measure, index) => (
@@ -159,10 +164,11 @@ const MeasuresWidget = () => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            padding: '10px',
-                            background: 'rgba(255, 255, 255, 0.05)',
-                            borderRadius: '8px',
-                            border: '1px solid var(--border-color)'
+                            padding: '12px 16px',
+                            background: '#f9f9f7',
+                            borderRadius: '16px',
+                            border: '1px solid var(--border-color)',
+                            transition: 'all 0.2s'
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <div style={{
