@@ -61,7 +61,7 @@ const SearchWidget = () => {
                     marginBottom: '10px'
                 }}>
                     <h4 style={{ fontSize: '0.9rem', color: '#38bdf8', marginBottom: '4px' }}>Réponse Rapide</h4>
-                    <p style={{ fontSize: '0.95rem', lineHeight: '1.4' }}>{results.answer_box.snippet || results.answer_box.answer}</p>
+                    <p style={{ fontSize: '0.95rem', lineHeight: '1.4', wordBreak: 'break-word' }}>{results.answer_box.snippet || results.answer_box.answer}</p>
                 </div>
             );
         }
@@ -75,7 +75,7 @@ const SearchWidget = () => {
                         <h4 style={{ color: '#38bdf8', fontSize: '1rem', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             {first.title} <ExternalLink size={12} />
                         </h4>
-                        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{first.snippet}</p>
+                        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.4', wordBreak: 'break-word' }}>{first.snippet}</p>
                     </a>
                 </div>
             );
@@ -125,7 +125,8 @@ const SearchWidget = () => {
                     flex: 1,
                     overflowY: 'auto',
                     minHeight: '120px',
-                    paddingRight: '4px'
+                    paddingRight: '4px',
+                    overflowX: 'hidden'
                 }}>
                     {renderContent()}
                 </div>
