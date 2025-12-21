@@ -155,7 +155,14 @@ app.get('/api/sensors', async (req, res) => {
 
 app.get('/api/measures', async (req, res) => {
     try {
-        const measures = await Measure.find().sort({ _id: -1 }).limit(100);
+        const query = {};
+        if (req.query.sensorID) {
+            query.$or = [
+                { sensorID: req.query.sensorID },
+                { 'sensorID.$oid': req.query.sensorID }
+            ];
+        }
+        const measures = await Measure.find(query).sort({ _id: -1 }).limit(100);
         res.json(measures);
     } catch (err) { res.status(500).json({ error: err.message }); }
 });

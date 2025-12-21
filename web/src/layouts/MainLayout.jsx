@@ -1,9 +1,19 @@
 import React from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Settings, Activity } from 'lucide-react';
 import '../styles/layout.css'; // We'll create this next
 
 const MainLayout = () => {
+    const location = useLocation();
+
+    // Determine page title based on route
+    const getPageTitle = () => {
+        if (location.pathname === '/admin') {
+            return 'Administrateur';
+        }
+        return 'Dashboard';
+    };
+
     return (
         <div className="layout-container">
             <aside className="sidebar glass-panel">
@@ -43,7 +53,7 @@ const MainLayout = () => {
 
             <main className="main-content">
                 <header className="top-bar">
-                    <h2 className="page-title">Welcome back</h2>
+                    <h2 className="page-title">{getPageTitle()}</h2>
                     <div className="date-display">{new Date().toLocaleDateString()}</div>
                 </header>
                 <div className="content-scroll">

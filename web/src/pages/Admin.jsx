@@ -5,10 +5,34 @@ import '../styles/dashboard.css'; // Re-use dashboard styles for consistency
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('users'); // 'users' or 'sensors'
     const [data, setData] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [sensors, setSensors] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [formData, setFormData] = useState({});
+
+    // Fetch users for sensor dropdown
+    const fetchUsers = async () => {
+        try {
+            const res = await fetch('http://localhost:3001/api/users');
+            const result = await res.json();
+            setUsers(result);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        }
+    };
+
+    // Fetch sensors for measure dropdown
+    const fetchSensors = async () => {
+        try {
+            const res = await fetch('http://localhost:3001/api/sensors');
+            const result = await res.json();
+            setSensors(result);
+        } catch (error) {
+            console.error("Error fetching sensors:", error);
+        }
+    };
 
     // Fetch data based on active tab
     const fetchData = async () => {
@@ -35,16 +59,22 @@ const Admin = () => {
 
     useEffect(() => {
         fetchData();
+        fetchUsers();
+        fetchSensors();
     }, [activeTab]);
 
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this item?")) return;
         try {
+            // Extract actual ID value (handle both string and {$oid: "..."} format)
+            const actualId = id?.$oid || id;
+
             let endpoint;
             if (activeTab === 'users') endpoint = 'users';
             else if (activeTab === 'sensors') endpoint = 'sensors';
             else endpoint = 'measures';
-            await fetch(`http://localhost:3001/api/${endpoint}/${id}`, {
+
+            await fetch(`http://localhost:3001/api/${endpoint}/${actualId}`, {
                 method: 'DELETE'
             });
             fetchData(); // Refresh list
@@ -129,38 +159,43 @@ const Admin = () => {
 
     // Render Table Rows
     const renderTableRows = () => {
-        return data.map((item) => (
-            <tr key={item._id}>
-                <td style={{ fontFamily: 'monospace', fontSize: '12px' }}>{safeRender(item._id)}</td>
-                {activeTab !== 'measures' && <td>{safeRender(item.location)}</td>}
-                {activeTab === 'users' ? (
-                    <>
-                        <td>{safeRender(item.personsInHouse)}</td>
-                        <td>{safeRender(item.houseSize)}</td>
-                    </>
-                ) : activeTab === 'sensors' ? (
-                    <>
-                        <td>{safeRender(item.creationDate)}</td>
-                    </>
-                ) : (
-                    <>
-                        <td>{safeRender(item.type)}</td>
-                        <td>{safeRender(item.value)}</td>
-                        <td style={{ fontFamily: 'monospace', fontSize: '11px' }}>{safeRender(item.sensorID)}</td>
-                    </>
-                )}
-                <td>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                        <button className="icon-btn edit-btn" onClick={() => openModal(item)}>
-                            <Edit size={16} />
-                        </button>
-                        <button className="icon-btn delete-btn" onClick={() => handleDelete(item._id)}>
-                            <Trash2 size={16} />
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        ));
+        return data.map((item) => {
+            // Extract actual ID (handle both string and {$oid: "..."} format)
+            const actualId = item._id?.$oid || item._id;
+
+            return (
+                <tr key={actualId}>
+                    <td style={{ fontFamily: 'monospace', fontSize: '12px' }}>{safeRender(item._id)}</td>
+                    {activeTab !== 'measures' && <td>{safeRender(item.location)}</td>}
+                    {activeTab === 'users' ? (
+                        <>
+                            <td>{safeRender(item.personsInHouse)}</td>
+                            <td>{safeRender(item.houseSize)}</td>
+                        </>
+                    ) : activeTab === 'sensors' ? (
+                        <>
+                            <td>{safeRender(item.creationDate)}</td>
+                        </>
+                    ) : (
+                        <>
+                            <td>{safeRender(item.type)}</td>
+                            <td>{safeRender(item.value)}</td>
+                            <td style={{ fontFamily: 'monospace', fontSize: '11px' }}>{safeRender(item.sensorID)}</td>
+                        </>
+                    )}
+                    <td>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <button className="icon-btn edit-btn" onClick={() => openModal(item)}>
+                                <Edit size={16} />
+                            </button>
+                            <button className="icon-btn delete-btn" onClick={() => handleDelete(actualId)}>
+                                <Trash2 size={16} />
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            )
+        });
     };
 
     return (
@@ -283,19 +318,44 @@ const Admin = () => {
                             )}
 
                             {activeTab === 'sensors' && (
-                                <div>
-                                    <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Creation Date</label>
-                                    <input
-                                        type="date"
-                                        required
-                                        value={formData.creationDate || ''}
-                                        onChange={e => setFormData({ ...formData, creationDate: e.target.value })}
-                                        style={{
-                                            width: '100%', padding: '10px', borderRadius: '6px',
-                                            border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)'
-                                        }}
-                                    />
-                                </div>
+                                <>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Creation Date</label>
+                                        <input
+                                            type="date"
+                                            required
+                                            value={formData.creationDate || ''}
+                                            onChange={e => setFormData({ ...formData, creationDate: e.target.value })}
+                                            style={{
+                                                width: '100%', padding: '10px', borderRadius: '6px',
+                                                border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)'
+                                            }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>User ID (Owner)</label>
+                                        <select
+                                            required
+                                            value={formData.userID || ''}
+                                            onChange={e => setFormData({ ...formData, userID: e.target.value })}
+                                            style={{
+                                                width: '100%', padding: '10px', borderRadius: '6px',
+                                                border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)'
+                                            }}
+                                        >
+                                            <option value="">-- Select User --</option>
+                                            {users.map(user => {
+                                                const userId = user._id?.$oid || user._id;
+                                                const userLocation = user.location ? (user.location.charAt(0).toUpperCase() + user.location.slice(1)) : 'Unknown';
+                                                return (
+                                                    <option key={userId} value={userId}>
+                                                        {userLocation} - {user.personsInHouse} person(s)
+                                                    </option>
+                                                );
+                                            })}
+                                        </select>
+                                    </div>
+                                </>
                             )}
 
                             {activeTab === 'users' && (
@@ -359,15 +419,26 @@ const Admin = () => {
                                     </div>
                                     <div>
                                         <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Sensor ID</label>
-                                        <input
-                                            type="text"
+                                        <select
+                                            required
                                             value={formData.sensorID || ''}
                                             onChange={e => setFormData({ ...formData, sensorID: e.target.value })}
                                             style={{
                                                 width: '100%', padding: '10px', borderRadius: '6px',
                                                 border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)'
                                             }}
-                                        />
+                                        >
+                                            <option value="">-- Select Sensor --</option>
+                                            {sensors.map(sensor => {
+                                                const sensorId = sensor._id?.$oid || sensor._id;
+                                                const sensorLocation = sensor.location ? (sensor.location.charAt(0).toUpperCase() + sensor.location.slice(1)) : 'Unknown';
+                                                return (
+                                                    <option key={sensorId} value={sensorId}>
+                                                        {sensorLocation} ({sensor.creationDate})
+                                                    </option>
+                                                );
+                                            })}
+                                        </select>
                                     </div>
                                 </>
                             )}
