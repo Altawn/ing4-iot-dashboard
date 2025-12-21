@@ -104,7 +104,7 @@ app.get('/api/dashboard-stats', async (req, res) => {
             .sort()
             .map(monthKey => {
                 const [year, month] = monthKey.split('-');
-                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const monthNames = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
                 return {
                     name: `${monthNames[parseInt(month) - 1]} ${year}`,
                     sensors: monthCounts[monthKey]

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Widget from '../components/Widget';
 import SensorGlobe from '../components/SensorGlobe';
 import ShoppingWidget from '../components/ShoppingWidget';
+import SearchWidget from '../components/SearchWidget';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, BarChart, Bar } from 'recharts';
 import { Cloud, Wind, Droplets, User, Radio, MapPin } from 'lucide-react';
 import '../styles/dashboard.css';
@@ -26,7 +27,7 @@ const Dashboard = () => {
             setWeather({
                 temp: 22,
                 city: 'Paris',
-                condition: 'Cloudy'
+                condition: 'Nuageux'
             });
         }, 1000);
 
@@ -124,16 +125,20 @@ const Dashboard = () => {
                             </div>
                         </div>
                         <p className="city-name">{weather.city}</p>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '4px' }}>{weather.condition}</p>
                     </div>
                 ) : (
                     <p>Chargement météo...</p>
                 )}
             </Widget>
 
-            {/* Widget 5: Marketplace */}
+            {/* Widget 5a: Assistant (Search) */}
+            <SearchWidget />
+
+            {/* Widget 5b: Marketplace (Shopping) */}
             <ShoppingWidget />
 
-            {/* Widget 5: Sensor Activity Over Time (Area Chart) */}
+            {/* Widget 6: Sensor Activity Over Time (Area Chart) */}
             <Widget title="Activité Capteurs (Nouveaux par Mois)" fullWidth className="chart-widget">
                 <div style={{ width: '100%', height: 300 }}>
                     <ResponsiveContainer>
@@ -157,7 +162,7 @@ const Dashboard = () => {
                 </div>
             </Widget>
 
-            {/* Widget 6: Live Global Coverage */}
+            {/* Widget 7: Live Global Coverage */}
             <Widget title="Couverture Mondiale" fullWidth className="globe-widget">
                 <SensorGlobe activeCountries={stats.activeCountries} />
             </Widget>
