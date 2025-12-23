@@ -9,7 +9,7 @@ const mockSerpResponse = {
 };
 
 export default {
-    title: 'Components/SearchWidget',
+    title: 'Components/AssistantWidget',
     component: SearchWidget,
     parameters: {
         layout: 'centered',

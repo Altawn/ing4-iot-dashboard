@@ -1,7 +1,7 @@
 import SensorGlobe from '../components/SensorGlobe';
 
 export default {
-    title: 'Components/SensorGlobe',
+    title: 'Components/MondeWidget',
     component: SensorGlobe,
     parameters: {
         layout: 'centered',

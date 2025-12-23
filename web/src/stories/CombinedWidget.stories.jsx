@@ -1,7 +1,7 @@
 import CombinedWidget from '../components/CombinedWidget';
 
 export default {
-    title: 'Dashboard/CombinedWidget',
+    title: 'Components/BoutiqueAssistantWidget',
     component: CombinedWidget,
 };
 

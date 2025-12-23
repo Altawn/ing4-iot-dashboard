@@ -1,7 +1,7 @@
 import Widget from '../components/Widget';
 
 export default {
-    title: 'Components/Widget',
+    title: 'Components/WidgetDeBase',
     component: Widget,
     parameters: {
         layout: 'centered',

@@ -95,10 +95,19 @@ const Admin = () => {
                 ? `http://localhost:3001/api/${endpoint}/${editingItem._id}`
                 : `http://localhost:3001/api/${endpoint}`;
 
+            // Format data before sending
+            let payload = { ...formData };
+            if (activeTab === 'sensors' && payload.creationDate && payload.creationDate.includes('-')) {
+                const [year, month, day] = payload.creationDate.split('-');
+                if (year && month && day) {
+                    payload.creationDate = `${parseInt(month)}/${parseInt(day)}/${year}`;
+                }
+            }
+
             await fetch(url, {
                 method: method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(payload)
             });
 
             setShowModal(false);
@@ -112,7 +121,18 @@ const Admin = () => {
 
     const openModal = (item = null) => {
         setEditingItem(item);
-        setFormData(item || {});
+
+        // Handle date conversion for editing sensors (M/D/YYYY -> YYYY-MM-DD)
+        let initialData = item ? { ...item } : {};
+        if (item && activeTab === 'sensors' && item.creationDate && item.creationDate.includes('/')) {
+            const [month, day, year] = item.creationDate.split('/');
+            if (month && day && year) {
+                const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                initialData.creationDate = formattedDate;
+            }
+        }
+
+        setFormData(initialData);
         setShowModal(true);
     };
 

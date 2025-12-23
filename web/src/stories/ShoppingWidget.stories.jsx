@@ -62,7 +62,7 @@ global.fetch = async (url) => {
 };
 
 export default {
-    title: 'Components/ShoppingWidget',
+    title: 'Components/BoutiqueAssistant',
     component: ShoppingWidget,
     parameters: {
         layout: 'centered',

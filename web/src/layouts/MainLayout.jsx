@@ -33,7 +33,7 @@ const MainLayout = () => {
                     <div className="sidebar-profile">
                         <div className="profile-image-container">
                             <img
-                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mark"
+                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&top=shortCurly&accessories=prescription02&skinColor=ffdbb4&hairColor=4a312c&facialHairProbability=0"
                                 alt="Profile"
                                 className="profile-image"
                             />

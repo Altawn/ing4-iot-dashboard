@@ -1,7 +1,7 @@
 import MeasuresWidget from '../components/MeasuresWidget';
 
 export default {
-    title: 'Components/MeasuresWidget',
+    title: 'Components/MesuresWidget',
     component: MeasuresWidget,
     parameters: {
         layout: 'padded',
