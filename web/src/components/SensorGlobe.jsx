@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import Globe from 'react-globe.gl';
 
-// Map country names from DB to coordinates
+
 const COUNTRY_MAPPING = {
     'ethiopia': { lat: 9.145, lng: 40.489673, iso: 'ETH' },
     'czech republic': { lat: 49.817492, lng: 15.472962, iso: 'CZE' },
@@ -27,7 +27,7 @@ const SensorGlobe = ({ activeCountries = [] }) => {
     const [countries, setCountries] = useState({ features: [] });
     const [rings, setRings] = useState([]);
 
-    // Convert activeCountries to coordinate data
+
     const countryData = useMemo(() => {
         return activeCountries
             .map(country => {
@@ -46,119 +46,92 @@ const SensorGlobe = ({ activeCountries = [] }) => {
             .filter(Boolean);
     }, [activeCountries]);
 
-    // Active ISO codes for highlighting
+
     const activeIsoCodes = useMemo(() => {
         return countryData.map(c => c.iso);
     }, [countryData]);
 
-    const containerRef = useRef();
-    const [dimensions, setDimensions] = useState({ width: 400, height: 400 });
-
     useEffect(() => {
-        if (containerRef.current) {
-            setDimensions({
-                width: containerRef.current.offsetWidth,
-                height: containerRef.current.offsetHeight
-            });
-        }
 
-        const handleResize = () => {
-            if (containerRef.current) {
-                setDimensions({
-                    width: containerRef.current.offsetWidth,
-                    height: containerRef.current.offsetHeight
-                });
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    useEffect(() => {
-        // Load World GeoJSON
         fetch('https://raw.githubusercontent.com/vasturiano/react-globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
             .then(res => res.json())
             .then(setCountries);
 
-        // Ripple rings effect
+
         const interval = setInterval(() => {
             setRings(currentRings => {
-                return countryData.map(loc => ({
+                const newRings = countryData.map(loc => ({
                     lat: loc.lat,
                     lng: loc.lng,
-                    maxR: 8,
-                    propagationSpeed: 2.5,
-                    repeatPeriod: 2500
+                    maxR: 6,
+                    propagationSpeed: 2,
+                    repeatPeriod: 2000
                 }));
+                return newRings;
             });
-        }, 2500);
+        }, 2000);
 
         return () => clearInterval(interval);
     }, [countryData]);
 
     useEffect(() => {
         if (globeEl.current) {
+
             globeEl.current.controls().autoRotate = true;
-            globeEl.current.controls().autoRotateSpeed = 0.8;
-            globeEl.current.pointOfView({ lat: 20, lng: 0, altitude: 2.2 }, 0);
+            globeEl.current.controls().autoRotateSpeed = 0.5;
+
+
+            globeEl.current.pointOfView({ lat: 20, lng: 0, altitude: 2.5 }, 0);
         }
     }, []);
 
-    const htmlMarkers = useMemo(() => {
-        return countryData.map(d => ({
-            lat: d.lat,
-            lng: d.lng,
-            size: 15,
-            color: '#fbbf24',
-            html: `
-                <div style="text-align: center; pointer-events: none;">
-                    <div style="color: #fbbf24; font-size: 24px;">📍</div>
-                    <div style="color: white; font-size: 11px; text-shadow: 0 0 4px #000; font-weight: bold;">${d.country}</div>
-                </div>
-            `
-        }));
-    }, [countryData]);
+
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, background: '#000' }}>
+        <div className="globe-container">
             <Globe
                 ref={globeEl}
-                width={dimensions.width}
-                height={dimensions.height}
-                globeImageUrl="https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-                bumpImageUrl="https://unpkg.com/three-globe/example/img/earth-topology.png"
-                backgroundImageUrl="https://unpkg.com/three-globe/example/img/night-sky.png"
+                width={800}
+                height={400}
+                globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
                 backgroundColor="rgba(0,0,0,0)"
-                showAtmosphere={true}
-                atmosphereColor="#6366f1"
-                atmosphereAltitude={0.25}
+
 
                 polygonsData={countries.features}
-                polygonAltitude={0.02}
+                polygonAltitude={0.01}
                 polygonCapColor={d => {
                     const iso3 = d.properties.ISO_A3 || d.properties.ADM0_A3;
-                    return activeIsoCodes.includes(iso3) ? 'rgba(99, 102, 241, 0.6)' : 'rgba(255, 255, 255, 0.05)';
+                    return activeIsoCodes.includes(iso3) ? 'rgba(239, 68, 68, 0.3)' : 'rgba(100, 100, 100, 0.1)';
                 }}
                 polygonSideColor={() => 'rgba(0, 0, 0, 0)'}
                 polygonStrokeColor={d => {
                     const iso3 = d.properties.ISO_A3 || d.properties.ADM0_A3;
-                    return activeIsoCodes.includes(iso3) ? '#6366f1' : 'rgba(255, 255, 255, 0.1)';
+                    return activeIsoCodes.includes(iso3) ? '#ef4444' : '#333';
                 }}
+                polygonLabel={() => ''}
+
 
                 ringsData={rings}
-                ringColor={() => ['#6366f1', 'rgba(99, 102, 241, 0)']}
+                ringColor={() => ['#ef4444', 'rgba(239, 68, 68, 0)']}
                 ringMaxRadius="maxR"
                 ringPropagationSpeed="propagationSpeed"
                 ringRepeatPeriod="repeatPeriod"
 
-                htmlElementsData={htmlMarkers}
+
+                htmlElementsData={countryData}
                 htmlElement={d => {
                     const el = document.createElement('div');
-                    el.innerHTML = d.html;
-                    el.style.pointerEvents = 'none';
+                    el.className = 'globe-marker';
+                    el.innerHTML = `
+                        <div class="globe-marker-icon">📍</div>
+                        <div class="globe-marker-label">${d.country}</div>
+                    `;
                     return el;
                 }}
+
+
+                atmosphereColor="#ef4444"
+                atmosphereAltitude={0.15}
             />
         </div>
     );
