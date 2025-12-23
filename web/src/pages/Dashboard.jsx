@@ -35,7 +35,7 @@ const Dashboard = () => {
     });
 
     useEffect(() => {
-        // Fetching Real Dashboard Stats from MongoDB
+
         fetch('http://localhost:3001/api/dashboard-stats')
             .then(res => res.json())
             .then(data => {
@@ -49,7 +49,7 @@ const Dashboard = () => {
             {/* Top Header - No search bar anymore */}
             <header className="dashboard-header">
                 <div className="header-titles">
-                    <h1>IoT Dashboard</h1>
+                    <h1>Tableau de Bord IoT</h1>
                     <p>Système de gestion des capteurs environnementaux</p>
                 </div>
             </header>

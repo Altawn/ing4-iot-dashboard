@@ -3,7 +3,7 @@ import { Trash2, Edit, Plus, X, User, Radio, Activity } from 'lucide-react';
 import '../styles/dashboard.css'; // Re-use dashboard styles for consistency
 
 const Admin = () => {
-    const [activeTab, setActiveTab] = useState('users'); // 'users' or 'sensors'
+    const [activeTab, setActiveTab] = useState('users');
     const [data, setData] = useState([]);
     const [users, setUsers] = useState([]);
     const [sensors, setSensors] = useState([]);
@@ -12,7 +12,7 @@ const Admin = () => {
     const [editingItem, setEditingItem] = useState(null);
     const [formData, setFormData] = useState({});
 
-    // Fetch users for sensor dropdown
+
     const fetchUsers = async () => {
         try {
             const res = await fetch('http://localhost:3001/api/users');
@@ -23,7 +23,7 @@ const Admin = () => {
         }
     };
 
-    // Fetch sensors for measure dropdown
+
     const fetchSensors = async () => {
         try {
             const res = await fetch('http://localhost:3001/api/sensors');
@@ -34,7 +34,7 @@ const Admin = () => {
         }
     };
 
-    // Fetch data based on active tab
+
     const fetchData = async () => {
         setLoading(true);
         try {
@@ -64,7 +64,7 @@ const Admin = () => {
     }, [activeTab]);
 
     const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this item?")) return;
+        if (!window.confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) return;
         try {
             // Extract actual ID value (handle both string and {$oid: "..."} format)
             const actualId = id?.$oid || id;
@@ -116,15 +116,15 @@ const Admin = () => {
         setShowModal(true);
     };
 
-    // Render Table Headers dynamically
+
     const renderTableHeaders = () => {
         if (activeTab === 'users') {
             return (
                 <>
                     <th>ID</th>
-                    <th>Location</th>
-                    <th>Persons</th>
-                    <th>Size (m²)</th>
+                    <th>Localisation</th>
+                    <th>Personnes</th>
+                    <th>Taille (m²)</th>
                     <th>Actions</th>
                 </>
             );
@@ -132,8 +132,8 @@ const Admin = () => {
             return (
                 <>
                     <th>ID</th>
-                    <th>Location</th>
-                    <th>Creation Date</th>
+                    <th>Localisation</th>
+                    <th>Date Création</th>
                     <th>Actions</th>
                 </>
             );
@@ -142,25 +142,25 @@ const Admin = () => {
                 <>
                     <th>ID</th>
                     <th>Type</th>
-                    <th>Value</th>
-                    <th>Sensor ID</th>
+                    <th>Valeur</th>
+                    <th>ID Capteur</th>
                     <th>Actions</th>
                 </>
             );
         }
     };
 
-    // Helper for safe rendering
+
     const safeRender = (value) => {
         if (value === null || value === undefined) return '';
         if (typeof value === 'object') return JSON.stringify(value);
         return value;
     };
 
-    // Render Table Rows
+
     const renderTableRows = () => {
         return data.map((item) => {
-            // Extract actual ID (handle both string and {$oid: "..."} format)
+
             const actualId = item._id?.$oid || item._id;
 
             return (
@@ -200,11 +200,11 @@ const Admin = () => {
 
     return (
         <div style={{ padding: '20px', color: 'var(--text-primary)' }}>
-            {/* Header section */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-                <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>Administration Panel</h2>
 
-                {/* Tab Switcher */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+                <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>Panneau d'Administration</h2>
+
+
                 <div style={{ display: 'flex', background: 'var(--bg-card)', borderRadius: '12px', padding: '6px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-sm)' }}>
                     <button
                         onClick={() => setActiveTab('users')}
@@ -217,7 +217,7 @@ const Admin = () => {
                             fontWeight: '600'
                         }}
                     >
-                        <User size={18} /> Users
+                        <User size={18} /> Utilisateurs
                     </button>
                     <button
                         onClick={() => setActiveTab('sensors')}
@@ -230,7 +230,7 @@ const Admin = () => {
                             fontWeight: '600'
                         }}
                     >
-                        <Radio size={18} /> Sensors
+                        <Radio size={18} /> Capteurs
                     </button>
                     <button
                         onClick={() => setActiveTab('measures')}
@@ -243,15 +243,15 @@ const Admin = () => {
                             fontWeight: '600'
                         }}
                     >
-                        <Activity size={18} /> Measures
+                        <Activity size={18} /> Mesures
                     </button>
                 </div>
             </div>
 
-            {/* Content Area */}
+
             <div className="glass-panel" style={{ padding: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                    <h3>Manage {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h3>
+                    <h3>Gestion {activeTab === 'users' ? 'Utilisateurs' : activeTab === 'sensors' ? 'Capteurs' : 'Mesures'}</h3>
                     <button
                         onClick={() => openModal()}
                         style={{
@@ -261,7 +261,7 @@ const Admin = () => {
                             fontWeight: '600', boxShadow: '0 4px 6px -1px rgba(99, 102, 241, 0.2)'
                         }}
                     >
-                        <Plus size={18} /> Add New
+                        <Plus size={18} /> Ajouter
                     </button>
                 </div>
 
@@ -274,7 +274,7 @@ const Admin = () => {
                         </thead>
                         <tbody>
                             {loading ? (
-                                <tr><td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>Loading data...</td></tr>
+                                <tr><td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>Chargement des données...</td></tr>
                             ) : (
                                 renderTableRows()
                             )}
@@ -283,7 +283,7 @@ const Admin = () => {
                 </div>
             </div>
 
-            {/* Modal */}
+
             {showModal && (
                 <div style={{
                     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -300,13 +300,13 @@ const Admin = () => {
                         </button>
 
                         <h3 style={{ marginBottom: '20px' }}>
-                            {editingItem ? 'Edit' : 'Add New'} {activeTab.slice(0, -1).charAt(0).toUpperCase() + activeTab.slice(0, -1).slice(1)}
+                            {editingItem ? 'Modifier' : 'Ajouter'} {activeTab === 'users' ? 'Utilisateur' : activeTab === 'sensors' ? 'Capteur' : 'Mesure'}
                         </h3>
 
                         <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             {activeTab !== 'measures' && (
                                 <div>
-                                    <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Location</label>
+                                    <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Localisation</label>
                                     <input
                                         type="text"
                                         required
@@ -323,7 +323,7 @@ const Admin = () => {
                             {activeTab === 'sensors' && (
                                 <>
                                     <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Creation Date</label>
+                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Date de Création</label>
                                         <input
                                             type="date"
                                             required
@@ -336,7 +336,7 @@ const Admin = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>User ID (Owner)</label>
+                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>ID Utilisateur (Propriétaire)</label>
                                         <select
                                             required
                                             value={formData.userID || ''}
@@ -346,13 +346,13 @@ const Admin = () => {
                                                 border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)'
                                             }}
                                         >
-                                            <option value="">-- Select User --</option>
+                                            <option value="">-- Sélectionner Utilisateur --</option>
                                             {users.map(user => {
                                                 const userId = user._id?.$oid || user._id;
-                                                const userLocation = user.location ? (user.location.charAt(0).toUpperCase() + user.location.slice(1)) : 'Unknown';
+                                                const userLocation = user.location ? (user.location.charAt(0).toUpperCase() + user.location.slice(1)) : 'Inconnu';
                                                 return (
                                                     <option key={userId} value={userId}>
-                                                        {userLocation} - {user.personsInHouse} person(s)
+                                                        {userLocation} - {user.personsInHouse} personne(s)
                                                     </option>
                                                 );
                                             })}
@@ -364,7 +364,7 @@ const Admin = () => {
                             {activeTab === 'users' && (
                                 <>
                                     <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Persons in House</label>
+                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Personnes dans la maison</label>
                                         <input
                                             type="number"
                                             value={formData.personsInHouse || ''}
@@ -376,7 +376,7 @@ const Admin = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>House Size</label>
+                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Taille Maison</label>
                                         <select
                                             value={formData.houseSize || 'small'}
                                             onChange={e => setFormData({ ...formData, houseSize: e.target.value })}
@@ -385,9 +385,9 @@ const Admin = () => {
                                                 border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)'
                                             }}
                                         >
-                                            <option value="small">Small</option>
-                                            <option value="medium">Medium</option>
-                                            <option value="big">Big</option>
+                                            <option value="small">Petit</option>
+                                            <option value="medium">Moyen</option>
+                                            <option value="big">Grand</option>
                                         </select>
                                     </div>
                                 </>
@@ -399,7 +399,7 @@ const Admin = () => {
                                         <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Type</label>
                                         <input
                                             type="text"
-                                            placeholder="e.g. temperature"
+                                            placeholder="ex: temperature"
                                             value={formData.type || ''}
                                             onChange={e => setFormData({ ...formData, type: e.target.value })}
                                             style={{
@@ -409,7 +409,7 @@ const Admin = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Value</label>
+                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Valeur</label>
                                         <input
                                             type="text"
                                             value={formData.value || ''}
@@ -421,7 +421,7 @@ const Admin = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>Sensor ID</label>
+                                        <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-secondary)' }}>ID Capteur</label>
                                         <select
                                             required
                                             value={formData.sensorID || ''}
@@ -431,10 +431,10 @@ const Admin = () => {
                                                 border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)'
                                             }}
                                         >
-                                            <option value="">-- Select Sensor --</option>
+                                            <option value="">-- Sélectionner Capteur --</option>
                                             {sensors.map(sensor => {
                                                 const sensorId = sensor._id?.$oid || sensor._id;
-                                                const sensorLocation = sensor.location ? (sensor.location.charAt(0).toUpperCase() + sensor.location.slice(1)) : 'Unknown';
+                                                const sensorLocation = sensor.location ? (sensor.location.charAt(0).toUpperCase() + sensor.location.slice(1)) : 'Inconnu';
                                                 return (
                                                     <option key={sensorId} value={sensorId}>
                                                         {sensorLocation} ({sensor.creationDate})
@@ -455,7 +455,7 @@ const Admin = () => {
                                     boxShadow: '0 4px 6px -1px rgba(99, 102, 241, 0.3)'
                                 }}
                             >
-                                Save Changes
+                                Sauvegarder
                             </button>
                         </form>
                     </div>

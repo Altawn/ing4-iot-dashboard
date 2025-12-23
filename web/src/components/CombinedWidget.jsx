@@ -163,9 +163,8 @@ const CombinedWidget = () => {
     };
 
     return (
-        <Widget title="Assistant & Marketplace">
+        <Widget title="Assistant & Boutique">
             <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '10px' }}>
-                {/* Mode Selector */}
                 <div style={{ display: 'flex', gap: '8px', padding: '4px', background: '#f3f4f6', borderRadius: '12px' }}>
                     <button
                         onClick={() => handleModeChange('assistant')}
@@ -209,11 +208,10 @@ const CombinedWidget = () => {
                         }}
                     >
                         <ShoppingBag size={16} />
-                        Marketplace
+                        Boutique
                     </button>
                 </div>
 
-                {/* Search Bar */}
                 <form onSubmit={handleSearch} style={{ display: 'flex', gap: '8px' }}>
                     <input
                         type="text"
@@ -251,7 +249,6 @@ const CombinedWidget = () => {
                     </button>
                 </form>
 
-                {/* Content Area */}
                 <div style={{
                     flex: 1,
                     overflowY: 'auto',

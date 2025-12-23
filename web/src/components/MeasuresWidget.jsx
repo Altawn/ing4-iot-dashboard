@@ -14,7 +14,7 @@ const MeasuresWidget = () => {
     const [measures, setMeasures] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Fetch users and sensors on mount
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,7 +32,7 @@ const MeasuresWidget = () => {
         fetchData();
     }, []);
 
-    // When user changes, update available locations
+
     useEffect(() => {
         if (!selectedUserId) {
             setAvailableLocations([]);
@@ -43,13 +43,13 @@ const MeasuresWidget = () => {
             return;
         }
 
-        // Find all sensors for this user
+
         const userSensors = sensors.filter(s => {
             const sensorUserId = s.userID?.$oid || s.userID;
             return sensorUserId === selectedUserId;
         });
 
-        // Extract unique locations
+
         const locations = [...new Set(userSensors.map(s => s.location))].filter(Boolean);
         setAvailableLocations(locations);
 
@@ -64,7 +64,7 @@ const MeasuresWidget = () => {
         setMeasures([]);
     }, [selectedUserId, sensors]);
 
-    // When location changes, fetch measures and extract types
+
     useEffect(() => {
         const fetchMeasuresForLocation = async () => {
             if (!selectedUserId || !selectedLocation) {
@@ -76,7 +76,7 @@ const MeasuresWidget = () => {
 
             setLoading(true);
             try {
-                // Find the sensor for this user + location
+
                 const sensor = sensors.find(s => {
                     const sensorUserId = s.userID?.$oid || s.userID;
                     return sensorUserId === selectedUserId && s.location === selectedLocation;
@@ -90,14 +90,14 @@ const MeasuresWidget = () => {
                     return;
                 }
 
-                // Fetch measures for this sensor
+
                 const res = await fetch(`http://localhost:3001/api/measures?sensorID=${sensor._id}`);
                 const data = await res.json();
 
                 const sortedData = data.reverse();
                 setMeasures(sortedData);
 
-                // Extract unique types
+
                 const types = [...new Set(sortedData.map(m => m.type))].filter(Boolean);
                 setAvailableTypes(types);
 
@@ -117,19 +117,19 @@ const MeasuresWidget = () => {
         fetchMeasuresForLocation();
     }, [selectedUserId, selectedLocation, sensors]);
 
-    // Helper to get user display name
+
     const getUserDisplay = (user) => {
         const userId = user._id?.$oid || user._id;
         const country = user.location ? (user.location.charAt(0).toUpperCase() + user.location.slice(1)) : 'Unknown';
         return `${userId} - ${country}`;
     };
 
-    // Filter measures based on selected type
+
     const filteredMeasures = selectedType
         ? measures.filter(m => m.type === selectedType)
         : [];
 
-    // Prepare data for the chart
+
     const chartData = filteredMeasures.map(m => ({
         date: new Date(m.creationDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
         fullDate: new Date(m.creationDate).toLocaleString(),
@@ -137,7 +137,7 @@ const MeasuresWidget = () => {
         type: m.type
     }));
 
-    // Determine chart color based on selected type
+
     let chartColor = '#8b5cf6'; // Default purple
     if (selectedType?.toLowerCase() === 'temperature') chartColor = '#ef4444';
     if (selectedType?.toLowerCase() === 'humidity') chartColor = '#3b82f6';

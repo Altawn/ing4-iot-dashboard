@@ -38,26 +38,26 @@ const MainLayout = () => {
                                 className="profile-image"
                             />
                         </div>
-                        <div className="profile-welcome">Welcome Back,</div>
+                        <div className="profile-welcome">Bon retour,</div>
                         <div className="profile-name">Daniel Ikka</div>
                     </div>
 
                     <nav className="sidebar-nav">
                         <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                             <LayoutDashboard size={20} />
-                            {!isCollapsed && <span>Dashboard</span>}
+                            {!isCollapsed && <span>Tableau de Bord</span>}
                         </NavLink>
 
                         <NavLink to="/admin" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                             <Settings size={20} />
-                            {!isCollapsed && <span>Admin</span>}
+                            {!isCollapsed && <span>Administration</span>}
                         </NavLink>
                     </nav>
 
                     <div className="sidebar-footer">
                         <NavLink to="/logout" className="nav-item">
                             <LogOut size={20} />
-                            {!isCollapsed && <span>Log Out</span>}
+                            {!isCollapsed && <span>Déconnexion</span>}
                         </NavLink>
                     </div>
                 </aside>
