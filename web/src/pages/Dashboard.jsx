@@ -56,9 +56,9 @@ const Dashboard = () => {
             </header>
 
             <div className="dashboard-grid">
-                {/* Left Column */}
+                {/* Left Column (Main Data) */}
                 <div className="col-main">
-                    {/* Summary Cards - No curves */}
+                    {/* Summary Cards */}
                     <div className="summary-cards">
                         <div className="card-item balance">
                             <div className="card-top">
@@ -84,6 +84,15 @@ const Dashboard = () => {
                             <button className="btn-pro"><Zap size={14} style={{ marginRight: '6px' }} /> Actif</button>
                         </div>
                     </div>
+
+
+
+                    {/* Globe Widget (Top of Main Column) */}
+                    <Widget title="Couverture Mondiale">
+                        <div style={{ width: '100%', height: '450px', position: 'relative', overflow: 'hidden', borderRadius: '16px' }}>
+                            <SensorGlobe activeCountries={stats.activeCountries} />
+                        </div>
+                    </Widget>
 
                     {/* Sensor Type Pie and Location Bar Side by Side */}
                     <div className="secondary-charts-grid">
@@ -162,16 +171,9 @@ const Dashboard = () => {
                             </ResponsiveContainer>
                         </div>
                     </Widget>
-
-                    {/* Globe Widget */}
-                    <Widget title="Couverture Mondiale">
-                        <div style={{ width: '100%', height: '450px', position: 'relative' }}>
-                            <SensorGlobe activeCountries={stats.activeCountries} />
-                        </div>
-                    </Widget>
                 </div>
 
-                {/* Right Column (Sidebar Widgets) */}
+                {/* Right Column (Tools & Utilities) */}
                 <div className="col-side">
                     <MeasuresWidget />
                     <SearchWidget />

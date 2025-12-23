@@ -100,7 +100,14 @@
 }
 
 .layout-container.collapsed .sidebar-profile {
-    display: none;
+    margin-bottom: 2rem;
+}
+
+.layout-container.collapsed .profile-image-container {
+    width: 50px;
+    height: 50px;
+    padding: 4px;
+    border-width: 2px;
 }
 
 .profile-image-container {
@@ -111,6 +118,7 @@
     border: 3px solid #333;
     margin-bottom: 1rem;
     position: relative;
+    transition: all 0.3s ease;
 }
 
 .profile-image {
@@ -130,6 +138,11 @@
     font-size: 1.1rem;
     font-weight: 600;
     color: white;
+}
+
+.layout-container.collapsed .profile-welcome,
+.layout-container.collapsed .profile-name {
+    display: none;
 }
 
 .sidebar-nav {
